@@ -1,12 +1,63 @@
-
-import { Card, CardHeader, Text, Icon } from "@ui5/webcomponents-react";
-import { spacing } from "@ui5/webcomponents-react-base";
-import { BarChart, LineChart } from "@ui5/webcomponents-react-charts";
 import { useState } from "react";
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  Text,
+  ShellBar,
+  ShellBarItem,
+  List,
+  StandardListItem,
+  CustomListItem,
+  ValueState,
+  ProgressIndicator,
+  FlexBox,
+  FlexBoxJustifyContent,
+  FlexBoxWrap,
+  FlexBoxDirection,
+  AnalyticalTable,
+  Icon
+} from "@ui5/webcomponents-react";
+import { spacing, ThemingParameters } from "@ui5/webcomponents-react-base";
+
+//import { Card, CardHeader, Text, Icon } from "@ui5/webcomponents-react";
+//import { spacing } from "@ui5/webcomponents-react-base";
+import { BarChart, LineChart } from "@ui5/webcomponents-react-charts";
 import lineChartIcon from '@ui5/webcomponents-icons/dist/line-chart.js';
 import barChartIcon from '@ui5/webcomponents-icons/dist/horizontal-bar-chart.js';
+import addIcon from "@ui5/webcomponents-icons/dist/add.js";
+import listIcon from "@ui5/webcomponents-icons/dist/list.js";
+import tableViewIcon from "@ui5/webcomponents-icons/dist/table-view.js";
 
+const tableData = new Array(500).fill(null).map((_, index) => {
+  return {
+    name: `name${index}`,
+    age: Math.floor(Math.random() * 100),
+    friend: {
+      name: `friend.Name${index}`,
+      age: Math.floor(Math.random() * 100)
+    }
+  };
+});
 
+const tableColumns = [
+  {
+    Header: "Name",
+    accessor: "name" // String-based value accessors!
+  },
+  {
+    Header: "Age",
+    accessor: "age"
+  },
+  {
+    Header: "Friend Name",
+    accessor: "friend.name"
+  },
+  {
+    Header: "Friend Age",
+    accessor: "friend.age"
+  }
+];
 
 
 export function MyApp() {
@@ -66,6 +117,23 @@ const dataset = [
 
   return (
     <div>
+       <ShellBar logo={<img src="https://raw.githubusercontent.com/sap-tutorials/Tutorials/master/tutorials/ui5-webcomponents-react-dashboard/reactLogo.png" />}
+       profile={
+         <Avatar>
+           <img src="https://images.unsplash.com/photo-1653379671988-b32fceafb5e5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww" />
+         </Avatar>
+      }
+       primaryTitle="My App"
+       >
+       <ShellBarItem icon={addIcon} text="Add" /> 
+       </ShellBar> 
+  
+    <FlexBox
+      justifyContent={FlexBoxJustifyContent.Center}
+      wrap={FlexBoxWrap.Wrap}
+      style={spacing.sapUiContentPadding}
+    >
+
   <Card
   header={
     <CardHeader
@@ -76,7 +144,7 @@ const dataset = [
       avatar={<Icon name={toggleCharts === "lineChart" ? lineChartIcon : barChartIcon} />}
     />
   }
-  style={{ width: "300px" }}
+  style={{ width: "300px", ...spacing.sapUiContentPadding }}
 >
     <Text style={spacing.sapUiContentPadding}>{contentTitle}</Text>
     {toggleCharts === "lineChart" ? (
@@ -96,7 +164,68 @@ const dataset = [
     )}
   </Card>
 
-    </div>
+  
+  <Card
+  header={
+    <CardHeader
+      titleText="Progress"
+      subtitleText="List"
+      avatar={<Icon name={listIcon} />}
+    />
+  }
+  style={{ width: "300px", ...spacing.sapUiContentPadding }}
+  >
+    <List>
+    <StandardListItem additionalText="finished" additionalTextState={ValueState.Success}>
+    Activity 1
+    </StandardListItem>
+    <StandardListItem additionalText="failed" additionalTextState={ValueState.Error}>
+    Activity 2
+    </StandardListItem>
+
+    <CustomListItem>
+  <FlexBox
+    direction={FlexBoxDirection.Column}
+    style={{ width: "100%", ...spacing.sapUiSmallMarginTopBottom }}
+  >
+    <FlexBox justifyContent={FlexBoxJustifyContent.SpaceBetween}>
+      <Text style={{ fontSize: ThemingParameters.sapFontLargeSize }}>
+        Activity 3
+      </Text>
+      <Text style={{ color: ThemingParameters.sapCriticalTextColor }}>
+        in progress
+      </Text>
+    </FlexBox>
+    <ProgressIndicator
+      value={89}
+      valueState={ValueState.Success}
+      style={{ ...spacing.sapUiTinyMarginTop }}
+    />
+  </FlexBox>
+</CustomListItem>
+
+      <CustomListItem> 
+      <ProgressIndicator value={5} valueState={ValueState.Error} />
+      </CustomListItem>
+    </List>
+
+  </Card>
+
+  <Card
+  header={
+    <CardHeader
+      titleText="AnalyticalTable"
+      avatar={<Icon name={tableViewIcon} />}
+    />
+  }
+  style={{ maxWidth: "900px", ...spacing.sapUiContentPadding }}
+>
+  <AnalyticalTable data={tableData} columns={tableColumns} visibleRows={5} />
+</Card>
+</FlexBox>
+
+
+</div>
 
 );
 }
