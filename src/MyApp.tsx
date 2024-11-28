@@ -1,231 +1,38 @@
-import { useState } from "react";
-import {
-  Avatar,
-  Card,
-  CardHeader,
-  Text,
-  ShellBar,
-  ShellBarItem,
-  List,
-  StandardListItem,
-  CustomListItem,
-  ValueState,
-  ProgressIndicator,
-  FlexBox,
-  FlexBoxJustifyContent,
-  FlexBoxWrap,
-  FlexBoxDirection,
-  AnalyticalTable,
-  Icon
-} from "@ui5/webcomponents-react";
-import { spacing, ThemingParameters } from "@ui5/webcomponents-react-base";
-
-//import { Card, CardHeader, Text, Icon } from "@ui5/webcomponents-react";
-//import { spacing } from "@ui5/webcomponents-react-base";
-import { BarChart, LineChart } from "@ui5/webcomponents-react-charts";
-import lineChartIcon from '@ui5/webcomponents-icons/dist/line-chart.js';
-import barChartIcon from '@ui5/webcomponents-icons/dist/horizontal-bar-chart.js';
+import { Avatar, ShellBar, ShellBarItem } from "@ui5/webcomponents-react";
 import addIcon from "@ui5/webcomponents-icons/dist/add.js";
-import listIcon from "@ui5/webcomponents-icons/dist/list.js";
-import tableViewIcon from "@ui5/webcomponents-icons/dist/table-view.js";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Home } from "./Home";
+import { Detail } from "./Detail";
+import { useNavigate } from "react-router-dom";
 
-const tableData = new Array(500).fill(null).map((_, index) => {
-  return {
-    name: `name${index}`,
-    age: Math.floor(Math.random() * 100),
-    friend: {
-      name: `friend.Name${index}`,
-      age: Math.floor(Math.random() * 100)
-    }
-  };
-});
 
-const tableColumns = [
-  {
-    Header: "Name",
-    accessor: "name" // String-based value accessors!
-  },
-  {
-    Header: "Age",
-    accessor: "age"
-  },
-  {
-    Header: "Friend Name",
-    accessor: "friend.name"
-  },
-  {
-    Header: "Friend Age",
-    accessor: "friend.age"
-  }
-];
 
 
 export function MyApp() {
-  const handleHeaderClick = () => {
-    if (toggleCharts === "lineChart") {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setToggleCharts("barChart");
-      }, 2000);
-    } else {
-      setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-        setToggleCharts("lineChart");
-      }, 2000);
-    }
+  const navigate = useNavigate();
+  const handleLogoClick = () => {
+  navigate("./");
   };
-  
-
-const [toggleCharts, setToggleCharts] = useState("lineChart");
-const [loading, setLoading] = useState(false);
-const contentTitle = toggleCharts === 'lineChart' ? 'Line Chart' : 'Bar Chart';
-const switchToChart = toggleCharts === 'lineChart' ? 'Bar Chart' : 'Line Chart';
-
-const dataset = [
-  {
-    month: "January",
-    data: 65
-  },
-  {
-    month: "February",
-    data: 59
-  },
-  {
-    month: "March",
-    data: 80
-  },
-  {
-    month: "April",
-    data: 81
-  },
-  {
-    month: "May",
-    data: 56
-  },
-  {
-    month: "June",
-    data: 55
-  },
-  {
-    month: "July",
-    data: 40
-  }
-];
-
 
   return (
     <div>
-       <ShellBar logo={<img src="https://raw.githubusercontent.com/sap-tutorials/Tutorials/master/tutorials/ui5-webcomponents-react-dashboard/reactLogo.png" />}
-       profile={
-         <Avatar>
-           <img src="https://images.unsplash.com/photo-1653379671988-b32fceafb5e5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww" />
-         </Avatar>
-      }
-       primaryTitle="My App"
-       >
-       <ShellBarItem icon={addIcon} text="Add" /> 
-       </ShellBar> 
-  
-    <FlexBox
-      justifyContent={FlexBoxJustifyContent.Center}
-      wrap={FlexBoxWrap.Wrap}
-      style={spacing.sapUiContentPadding}
-    >
-
-  <Card
-  header={
-    <CardHeader
-      titleText="Stock Prices"
-      subtitleText={`Click here to switch to ${switchToChart}`}
-      interactive
-      onClick={handleHeaderClick}
-      avatar={<Icon name={toggleCharts === "lineChart" ? lineChartIcon : barChartIcon} />}
-    />
-  }
-  style={{ width: "300px", ...spacing.sapUiContentPadding }}
->
-    <Text style={spacing.sapUiContentPadding}>{contentTitle}</Text>
-    {toggleCharts === "lineChart" ? (
-      <LineChart
-        dimensions={[{ accessor: "month" }]}
-        measures={[{ accessor: "data", label: "Stock Price" }]}
-        dataset={dataset}
-        loading={loading}
-      />
-    ) : (
-      <BarChart
-        dimensions={[{ accessor: "month" }]}
-        measures={[{ accessor: "data" }]}
-        dataset={dataset}
-        loading={loading}
-      />
-    )}
-  </Card>
-
-  
-  <Card
-  header={
-    <CardHeader
-      titleText="Progress"
-      subtitleText="List"
-      avatar={<Icon name={listIcon} />}
-    />
-  }
-  style={{ width: "300px", ...spacing.sapUiContentPadding }}
-  >
-    <List>
-    <StandardListItem additionalText="finished" additionalTextState={ValueState.Success}>
-    Activity 1
-    </StandardListItem>
-    <StandardListItem additionalText="failed" additionalTextState={ValueState.Error}>
-    Activity 2
-    </StandardListItem>
-
-    <CustomListItem>
-  <FlexBox
-    direction={FlexBoxDirection.Column}
-    style={{ width: "100%", ...spacing.sapUiSmallMarginTopBottom }}
-  >
-    <FlexBox justifyContent={FlexBoxJustifyContent.SpaceBetween}>
-      <Text style={{ fontSize: ThemingParameters.sapFontLargeSize }}>
-        Activity 3
-      </Text>
-      <Text style={{ color: ThemingParameters.sapCriticalTextColor }}>
-        in progress
-      </Text>
-    </FlexBox>
-    <ProgressIndicator
-      value={89}
-      valueState={ValueState.Success}
-      style={{ ...spacing.sapUiTinyMarginTop }}
-    />
-  </FlexBox>
-</CustomListItem>
-
-      <CustomListItem> 
-      <ProgressIndicator value={5} valueState={ValueState.Error} />
-      </CustomListItem>
-    </List>
-
-  </Card>
-
-  <Card
-  header={
-    <CardHeader
-      titleText="AnalyticalTable"
-      avatar={<Icon name={tableViewIcon} />}
-    />
-  }
-  style={{ maxWidth: "900px", ...spacing.sapUiContentPadding }}
->
-  <AnalyticalTable data={tableData} columns={tableColumns} visibleRows={5} />
-</Card>
-</FlexBox>
-
-
-</div>
-
-);
+      <ShellBar
+        logo={<img src="data:image/jpeg;base64,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" />}
+        profile={
+          <Avatar>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAM1BMVEXk5ueutLeqsbTn6eqpr7PJzc/j5ebf4eLZ3N2wtrnBxsjN0NLGysy6v8HT1tissra8wMNxTKO9AAAFDklEQVR4nO2d3XqDIAxAlfivoO//tEOZWzvbVTEpic252W3PF0gAIcsyRVEURVEURVEURVEURVEURVEURVEURVEURVEURflgAFL/AirAqzXO9R7XNBVcy9TbuMHmxjN6lr92cNVVLKEurVfK/zCORVvW8iUBnC02dj+Wpu0z0Y6QlaN5phcwZqjkOkK5HZyPAjkIjSO4fIdfcOwFKkJlX4zPu7Ha1tIcwR3wWxyFhRG6g4Je0YpSPDJCV8a2Sv2zd1O1x/2WMDZCwljH+clRrHfWCLGK8REMiql//2si5+DKWKcWeAGcFMzzNrXC/0TUwQ2s6+LhlcwjTMlYsUIQzPOCb7YBiyHopyLXIEKPEkI/TgeuiidK/R9FniUDOjRDpvm0RhqjMyyXNjDhCfIMYl1gGjIMIuYsnGEYRMRZOMMunaLVwpWRW008v6fYKDIzxCwVAeNSO90BJW6emelYBRF/kHpYGVaoxTDAaxOFsfP9y8hpJ4xd7gOcij7JNGQ1EYFgkPJa1jQEiYZXRaRINKxSDUW9n+FT82lSKadkiru9/4XPqSLWOekGPoY05TAvLm9orm+YWuwHoBHkZKijNBJGmeb61eL6Ff/6q7bLr7yvv3vKGhpDRjvgjGaPz+gUg6YgcvpyAR2FIZ9U6nEEyZRTovmEU32KichpGn7C17XrfyH9gK/c0CMP05HZIM2uf9sEveizKveBy9/6Qt7o89ne33D525cfcIMW6ab+TMEukQbQbu+xu7X3A9bChmWaCeAkG17bpntwXgWxHaMzGPmUaR5dQZiKqRVeUZ3047fi3nAu28h4CHxCsZAgmEH8Y27jJAhm8c+5RQzRQNVGhVFSfxOYIjp/pP7RxzjevYXVGf4eLt+BJ1vCuLuLkrgABgCGXZ2wik5uty+oBvNirI6mkzhAf4Gsb58Hcm67Jzd+KwD10BYPLL3e0MjvKrgAULnOfveF/O4N2Xb9BZom3gJes3F9X5Zze8/6Yt09b4CrqsEjUv8oFBaR2rl+6CZr2xVrp24o/WitBKuGrrpl1+bFkmK2qXTON4VpbdfLa7o7y/WdLxG7lm2Lqh2clOwTegbvc/vj2U78CwhA87Bn8G5Nk3eOb0Nsr9flz3sG78UUtue4kpv1xvjg3TMay62BMlTlP+vrOMnJsRmt/ze0jsfkPPYdAH57hK+34PeOyc8XIXu5xT2HsUkdZz+adwg8HGFfQ3K5jtDvbUiO4Di9/ywHGrL88pDizZ++oTp+an+SMX/ndymUCwmHMdO7yuOx83pUx/eEMU0AvxWndwgidAqOZ8ypCwdEfvvEo6D9HwpA8wzvmOJEqAg9ySu8g4x0Hb9hSB/BANEKJ+LbPBU0lzbAJs4xt1AoshKkUGQmiH8/jJ0gdhTTLmSegHlPE0oOdXALnqDjKYh3px//fSgSWG8UqfrrIICzYYSJXRr9BSPbpNzw7gBjKjKOYI7ReIGqQRIap5+5MdjyvuDkExvGeXSlONWZAP3/AZBwJohU7QJRGU+cTVH18ELmRPNBmibW6MT/k1b0XhdkRBvyT6SB6EYv/GvhSmRNpGngRULsAlxMCGNXp7w3FfdEbTEEDdLI9TdIKRUzUesa3I461ER8cpNT7gMRhpKmYVS9ELOgCUQsa4SsulciKiLbY+AnHD8cpuhISsnxpamI84sbDq9qYJgf8wiiOBrC7Ml7M7ZECCqKoiiKoiiKoiiKoijv5AvJxlZRyNWWLwAAAABJRU5ErkJggg==" />
+          </Avatar>
+        }
+        primaryTitle="My App"
+        onLogoClick={handleLogoClick}
+      >
+        <ShellBarItem icon={addIcon} text="Add" />
+      </ShellBar>
+      <Routes>
+      <Route path="/home" element={<Home />} />
+      <Route path="/detail" element={<Detail />} />
+      <Route path="*" element={<Navigate replace to="/home" />} />
+    </Routes>
+    </div>
+  );
 }
